@@ -126,7 +126,8 @@ class GroupbyImputer(TransformerMixin, BaseEstimator):
 
         return self
 
-    def transform(self, X):
+    def transform(self, X, y=None):
+        X = X.copy()
         # impute missing values based on train_value
         if isinstance(self.groupby_column, str):
 
@@ -376,6 +377,7 @@ class DataFrameSelector(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X):
+        X = X.copy()
         return X[self.final_columns]
 
 class PandasTransformer(TransformerMixin, BaseEstimator):
@@ -655,6 +657,7 @@ class PandasFeatureUnion(FeatureUnion):
         return pd.concat(Xs, axis="columns", copy=False)
 
     def transform(self, X):
+        X = X.copy()
         Xs = Parallel(n_jobs=self.n_jobs)(
             delayed(_transform_one)(
                 transformer=trans,
